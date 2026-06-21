@@ -25,7 +25,7 @@ export default function RootLayout({
         <body className="min-h-full flex flex-col">
           <Navbar />
           {children}
-          <Toaster />
+          <Toaster richColors theme="light" />
         </body>
       </AuthProvider>
     </html>

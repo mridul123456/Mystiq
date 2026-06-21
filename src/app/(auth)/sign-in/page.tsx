@@ -35,11 +35,7 @@ function page() {
 
     if(result?.error) {
       toast.error('Login Failed', {
-        description: 'Incorrect Username and Password',
-        style: {
-          background: 'red',
-          color: 'white',
-        },
+        description: 'Incorrect Username and Password'
       })
     } else {
       toast.success('Login Successful')
