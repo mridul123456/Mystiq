@@ -126,65 +126,118 @@ const page = () => {
         return <div>Please Login</div>
     }
 
-      return (
-        <div className="w-full min-h-screen px-4 md:px-8 lg:px-12 py-8">
-        <h1 className="text-4xl font-bold mb-4">User Dashboard</h1>
+    return (
+  <div className="min-h-screen bg-[#0D1117] text-white px-4 md:px-8 lg:px-12 py-8">
+    
+    {/* Header */}
+    <div className="mb-8">
+      <h1 className="text-3xl md:text-4xl font-bold">
+        Feedback Dashboard
+      </h1>
 
-        <div className="mb-4">
-            <h2 className="text-lg font-semibold mb-2">Copy Your Unique Link</h2>{' '}
-            <div className="flex items-center">
-            <input
-                type="text"
-                value={profileUrl}
-                disabled
-                className="input input-bordered w-full p-2 mr-2"
-            />
-            <Button onClick={copyToClipboard}>Copy</Button>
-            </div>
-        </div>
+      <p className="text-zinc-400 mt-2">
+        Manage your profile link and incoming anonymous messages.
+      </p>
+    </div>
 
-        <div className="mb-4">
-            <Switch
-            {...register('acceptMessages')}
-            checked={acceptMessages}
-            onCheckedChange={handleSwitchChange}
-            disabled={isSwitchLoading}
-            />
-            <span className="ml-2">
-            Accept Messages: {acceptMessages ? 'On' : 'Off'}
-            </span>
-        </div>
-        <Separator />
+    {/* Profile Link Card */}
+    <div className="bg-[#161B22] border border-[#30363D] rounded-2xl p-6 mb-6">
+      <h2 className="text-lg font-semibold mb-4">
+        Your Unique Link
+      </h2>
+
+      <div className="flex flex-col sm:flex-row gap-3">
+        <input
+          type="text"
+          value={profileUrl}
+          disabled
+          className="flex-1 h-12 rounded-lg bg-[#0D1117] border border-[#30363D] px-4 text-zinc-300"
+        />
 
         <Button
-            className="mt-4"
-            variant="outline"
-            onClick={(e) => {
-            e.preventDefault();
-            fetchMessages(true);
-            }}
+          onClick={copyToClipboard}
+          className="h-12 bg-white text-black hover:bg-zinc-200"
         >
-            {isLoading ? (
-            <Loader2 className="h-4 w-4 animate-spin" />
-            ) : (
-            <RefreshCcw className="h-4 w-4" />
-            )}
+          Copy Link
         </Button>
-        <div className="mt-4 grid grid-cols-1 md:grid-cols-2 gap-6">
-            {messages.length > 0 ? (
-            messages.map((message, index) => (
-                <MessageCard
-                    key={message._id.toString()}
-                    message={message}
-                    onMessageDelete={handleDeleteMessage}
-                />
-            ))
-            ) : (
-            <p>No messages to display.</p>
-            )}
+      </div>
+    </div>
+
+    {/* Settings Card */}
+    <div className="bg-[#161B22] border border-[#30363D] rounded-2xl p-6 mb-6">
+      <div className="flex items-center justify-between">
+        <div>
+          <h2 className="font-semibold">
+            Accept Anonymous Messages
+          </h2>
+
+          <p className="text-sm text-zinc-400">
+            Allow visitors to send you anonymous messages.
+          </p>
         </div>
+
+        <Switch
+          {...register('acceptMessages')}
+          checked={acceptMessages}
+          onCheckedChange={handleSwitchChange}
+          disabled={isSwitchLoading}
+        />
+      </div>
+    </div>
+
+    {/* Actions */}
+    <div className="flex justify-between items-center mb-6">
+      <h2 className="text-xl font-semibold">
+        Messages
+      </h2>
+
+      <Button
+        variant="outline"
+        className="border-[#30363D] bg-[#161B22] hover:bg-[#21262D] text-white"
+        onClick={(e) => {
+          e.preventDefault()
+          fetchMessages(true)
+        }}
+      >
+        {isLoading ? (
+          <Loader2 className="h-4 w-4 animate-spin" />
+        ) : (
+          <>
+            <RefreshCcw className="h-4 w-4 mr-2" />
+            Refresh
+          </>
+        )}
+      </Button>
+    </div>
+
+    <Separator className="mb-6 bg-[#30363D]" />
+
+    {/* Messages Grid */}
+    <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      {messages.length > 0 ? (
+        messages.map((message, index) => (
+          <MessageCard
+            key={message?._id?.toString() || index}
+            message={message}
+            onMessageDelete={handleDeleteMessage}
+          />
+        ))
+      ) : (
+        <div className="col-span-full">
+          <div className="bg-[#161B22] border border-[#30363D] rounded-2xl p-10 text-center">
+            <h3 className="text-lg font-semibold mb-2">
+              No Messages Yet
+            </h3>
+
+            <p className="text-zinc-400">
+              Share your link and start receiving anonymous feedback.
+            </p>
+          </div>
         </div>
-    );
+      )}
+    </div>
+  </div>
+)
 }
 
 export default page
