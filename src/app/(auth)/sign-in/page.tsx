@@ -21,7 +21,8 @@ function page() {
     defaultValues: {
       identifier: '',
       password: ''
-    }
+    },
+    mode: 'onChange'
   })
   
   const onSubmit = async (data: z.infer<typeof signInSchema>) => {
@@ -96,7 +97,7 @@ function page() {
                   )}
                 />
 
-                <Button type="submit" className="w-full" >
+                <Button type="submit" className="w-full" disabled={!form.formState.isValid} >
                   LOG IN
                 </Button>
             </form>
