@@ -21,13 +21,13 @@ export default function RootLayout({
       lang="en"
       className={cn("h-full", "antialiased", "font-sans")}
     >
-      <AuthProvider>
         <body className="min-h-full flex flex-col">
-          <Navbar />
-          {children}
-          <Toaster richColors theme="light" />
+          <AuthProvider>
+            {/* <Navbar /> */}
+            {children}
+            <Toaster richColors theme="light" />
+          </AuthProvider>
         </body>
-      </AuthProvider>
     </html>
   );
 }

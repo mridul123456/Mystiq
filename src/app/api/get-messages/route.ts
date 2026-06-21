@@ -26,10 +26,13 @@ export async function GET(req: Request) {
 
         const user = await UserModel.aggregate([
             {
-                $match: {id : userId}
+                $match: {_id : userId}
             },
             {
-                $unwind: "$messages"
+                $unwind: {
+                    path: "$messages",
+                    preserveNullAndEmptyArrays: true
+                }
             },
             {
                 $sort: {'messages.createdAt': -1}

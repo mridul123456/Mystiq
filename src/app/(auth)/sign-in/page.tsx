@@ -32,8 +32,6 @@ function page() {
       password: data.password
     })
 
-    console.log('Result ', result);
-
     if(result?.error) {
       toast.error('Login Failed', {
         description: 'Incorrect Username and Password'
@@ -41,9 +39,9 @@ function page() {
     } else {
       toast.success('Login Successful')
     }
-
     if(result?.url) {
       router.replace('/dashboard')
+      //  window.location.href = '/dashboard';
     }
   }
 

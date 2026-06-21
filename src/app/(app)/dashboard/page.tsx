@@ -20,12 +20,13 @@ const page = () => {
     const [messages, setMessages] = useState<Message[]>([])
     const [isLoading, setIsLoading] = useState(false)
     const [isSwitchLoading, setIsSwitchLoading] = useState(false)
-
+    const [baseUrl, setBaseUrl] = useState('')
+    
     const handleDeleteMessage = (messageId: string) => {
         setMessages(messages.filter((message) => message._id.toString() !== messageId))
     }
 
-    const { data: session } = useSession();
+    const { data: session, status } = useSession();
     const form = useForm({
         resolver: zodResolver(acceptMessageSchmea)
     })
@@ -73,7 +74,9 @@ const page = () => {
     }, [setIsLoading, setMessages])
 
     useEffect(() => {
-        if(!session || !session.user) return;
+        if(!session || !session.user) {
+            return; 
+        }
         fetchMessages()
         fetchAcceptMessage()
     }, [session, setValue, fetchAcceptMessage, fetchMessages])
@@ -81,10 +84,11 @@ const page = () => {
     //handle switch change
     const handleSwitchChange = async() => {
         try {
+            const newValue = !acceptMessages;
             const response = await axios.post<ApiResponse>('api/accept-messages', {
-                acceptMessages: !acceptMessages
+                acceptMessages: newValue
             })   
-            setValue('acceptMessages', acceptMessages)
+            setValue('acceptMessages', newValue)
             toast.success('', {
                 description: response.data?.message
             })
@@ -96,21 +100,34 @@ const page = () => {
         }
     }
 
-    const {username} = session?.user as User
-    const baseUrl = `${window.location.protocol}//${window.location.host}`
+    const username = session?.user?.username
+    
+    useEffect(() => {
+        setBaseUrl(`${window.location.protocol}//${window.location.host}`)
+    }, [])
+
     const profileUrl = `${baseUrl}/u/${username}`
+    // const profileUrl = username ? `${process.env.NEXT_PUBLIC_APP_URL}/u/${username}` : ''
 
     const copyToClipboard = () => {
         navigator.clipboard.writeText(profileUrl)
         toast.success('Url Copied Successfully!')
     }
 
-    if(!session || !session.user) {
+    // if(!session || !session.user) {
+    //     return <div>Please Login</div>
+    // }
+
+    if (status === "loading") {
+        return <div>Loading...</div>
+    }
+
+    if (status === "unauthenticated") {
         return <div>Please Login</div>
     }
 
       return (
-        <div className="my-8 mx-4 md:mx-8 lg:mx-auto p-6 max-w-6xl">
+        <div className="w-full min-h-screen px-4 md:px-8 lg:px-12 py-8">
         <h1 className="text-4xl font-bold mb-4">User Dashboard</h1>
 
         <div className="mb-4">
