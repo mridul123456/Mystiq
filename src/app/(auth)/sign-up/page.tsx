@@ -1,182 +1,245 @@
 'use client'
 
-import { zodResolver } from "@hookform/resolvers/zod"
-import { useForm } from "react-hook-form"
-import * as z from "zod"
-import Link from "next/link"
-import { useEffect, useState } from "react"
+import { zodResolver } from '@hookform/resolvers/zod'
+import { useForm } from 'react-hook-form'
+import * as z from 'zod'
+import Link from 'next/link'
+import { useEffect, useState } from 'react'
 import { useDebounceCallback } from 'usehooks-ts'
-import { toast } from "sonner"
-import { useRouter } from "next/navigation"
-import { signUpSchema } from "@/schemas/signUpSchema"
+import { toast } from 'sonner'
+import { useRouter } from 'next/navigation'
+import { signUpSchema } from '@/schemas/signUpSchema'
 import axios, { AxiosError } from 'axios'
-import { ApiResponse } from "@/types/ApiResponse"
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
-import { Input } from "@/components/ui/input"
-import { Button } from "@/components/ui/button"
-import { Loader, Loader2Icon } from "lucide-react";
+import { ApiResponse } from '@/types/ApiResponse'
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from '@/components/ui/form'
+import { Input } from '@/components/ui/input'
+import { Button } from '@/components/ui/button'
+import { Loader2 } from 'lucide-react'
 
-function page() {
+function Page() {
+  const [username, setUsername] = useState('')
+  const [usernameMessage, setUsernameMessage] = useState('')
+  const [isCheckingUsername, setIsCheckingUsername] = useState(false)
+  const [isSubmitting, setIsSubmitting] = useState(false)
 
-  const [ username, setUsername ] = useState('')
-  const [ usernameMessage, setUsernameMessage ] = useState('')
-  const [ isCheckingUsername, setIsCheckingUsername ] = useState(false)
-  const [ isSubmitting, setIsSubmitting ] = useState(false)
-  
-  const debounced = useDebounceCallback(setUsername, 300);
-  const router = useRouter();
-  
-  //Zod implementation
-  const form = useForm<z.infer<typeof signUpSchema> >({
+  const debounced = useDebounceCallback(setUsername, 300)
+  const router = useRouter()
+
+  const form = useForm<z.infer<typeof signUpSchema>>({
     resolver: zodResolver(signUpSchema),
     defaultValues: {
       username: '',
       email: '',
-      password: ''
-    }
+      password: '',
+    },
+    mode: 'onChange',
   })
 
   useEffect(() => {
-    const checkUsernameUique = async () => {
-      if(username) {
-        setIsCheckingUsername(true);
-        setUsername('');
-        try{
-          const response = await axios.get(`/api/check-username-unique?username=${username}`)
+    const checkUsernameUnique = async () => {
+      if (username) {
+        setIsCheckingUsername(true)
+
+        try {
+          const response = await axios.get(
+            `/api/check-username-unique?username=${username}`
+          )
+
           setUsernameMessage(response.data.message)
         } catch (error) {
           const axiosError = error as AxiosError<ApiResponse>
+
           setUsernameMessage(
-            axiosError.response?.data.message ?? 'Error Checking username'
+            axiosError.response?.data.message ??
+              'Error checking username'
           )
         } finally {
           setIsCheckingUsername(false)
         }
       }
     }
-    
-    checkUsernameUique()
+
+    checkUsernameUnique()
   }, [username])
-  
+
   const onSubmit = async (data: z.infer<typeof signUpSchema>) => {
     setIsSubmitting(true)
+
     try {
-      const response = await axios.post<ApiResponse>('/api/sign-up', data)
-      toast.success("Success", {
+      const response = await axios.post<ApiResponse>(
+        '/api/sign-up',
+        data
+      )
+
+      toast.success('Success', {
         description: response.data.message,
       })
-      //or
-      // toast.success(response.data.message)
-      router.replace(`/verify/${username}`)
+
+      router.replace(`/verify/${data.username}`)
     } catch (error) {
-      console.error(`Error in signup of user`, error);
       const axiosError = error as AxiosError<ApiResponse>
-      let errorMessage = axiosError.response?.data.message
-      toast.error("Sigup failed", {
-        description: errorMessage
+
+      toast.error('Signup Failed', {
+        description:
+          axiosError.response?.data.message ||
+          'Something went wrong',
       })
     } finally {
-      setIsSubmitting(false);
+      setIsSubmitting(false)
     }
   }
 
   return (
-    <div className="flex justify-center items-center min-h-screen bg-gray-100" >
-      <div className="w-full max-w-md p-8 space-y-8 bg-white rounded-lg shadow-md" >
-          <div className="text-center">
-            <h1 className="text-4xl font-extrabold tracking-tight lg:text-5xl mb-6">
-              Join Mystiq
-            </h1>
-            <p className="mb-4" >
-              Sign Up to start your anonymous adventure
-            </p>
-          </div>
+    <div className="flex items-center justify-center min-h-screen bg-[#0D1117] px-4">
+      <div className="w-full max-w-xl p-10 md:p-12 space-y-8 bg-[#161B22] border border-[#30363D] rounded-3xl shadow-2xl">
 
-          <Form {...form} >
-            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6" >
-               <FormField
-                  name="username"
-                  control={form.control}
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Username</FormLabel>
-                      <FormControl>
-                        <Input 
-                          placeholder="Username"
-                          className="border border-gray-300"
-                          {...field} 
-                          onChange={(e) => {
-                            field.onChange(e)
-                            debounced(e.target.value)
-                          }}
-                        />
-                      </FormControl>
-                        {isCheckingUsername && <Loader2Icon className="animate-spin" />}
-                        <p className = { `text-sm ${usernameMessage === "Username is available" ? 'text-green-500' : 'text-red-500' }` } >
-                            {usernameMessage}
-                        </p>
-                      <FormMessage />
-                    </FormItem>
+        {/* Header */}
+        <div className="text-center">
+          <h1 className="text-5xl font-extrabold tracking-tight text-white mb-3">
+            Join Mystiq
+          </h1>
+
+          <p className="text-zinc-400 text-base">
+            Create your account and start receiving anonymous feedback
+          </p>
+        </div>
+
+        {/* Form */}
+        <Form {...form}>
+          <form
+            onSubmit={form.handleSubmit(onSubmit)}
+            className="space-y-6"
+          >
+            <FormField
+              name="username"
+              control={form.control}
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel className="text-zinc-300">
+                    Username
+                  </FormLabel>
+
+                  <FormControl>
+                    <Input
+                      placeholder="Choose a username"
+                      className="h-12 bg-[#0D1117] border-[#30363D] text-white placeholder:text-zinc-500"
+                      {...field}
+                      onChange={(e) => {
+                        field.onChange(e)
+                        debounced(e.target.value)
+                      }}
+                    />
+                  </FormControl>
+
+                  {isCheckingUsername && (
+                    <div className="flex items-center gap-2 text-zinc-400 text-sm">
+                      <Loader2 className="h-4 w-4 animate-spin" />
+                      Checking username...
+                    </div>
                   )}
-                />
 
-                <FormField
-                  name="email"
-                  control={form.control}
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Email</FormLabel>
-                      <FormControl>
-                        <Input 
-                          placeholder="Email"
-                          {...field}
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
+                  {usernameMessage && (
+                    <p
+                      className={`text-sm ${
+                        usernameMessage ===
+                        'Username is available'
+                          ? 'text-green-500'
+                          : 'text-red-500'
+                      }`}
+                    >
+                      {usernameMessage}
+                    </p>
                   )}
-                />
 
-                <FormField
-                  name="password"
-                  control={form.control}
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Password</FormLabel>
-                      <FormControl>
-                        <Input 
-                          type="password"
-                          placeholder="Password"
-                          {...field}
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
 
-                <Button type="submit" className="w-full" disabled={isSubmitting} >
-                  {
-                    isSubmitting ? (
-                    <>
-                      <Loader className="mr-2 h-4 w-4 animate-spin" /> Please Wait
-                    </>
-                    ) : ('SIGN UP')
-                  }
-                </Button>
-            </form>
-          </Form>
-          <div className="text-center mt-4">
-            <p>
-              Already a member?{' '}
-              <Link href="/sign-in" className="text-blue-600 hover:text-blue-800">
-                  Sign in
-              </Link>
-            </p>
-          </div>
+            <FormField
+              name="email"
+              control={form.control}
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel className="text-zinc-300">
+                    Email
+                  </FormLabel>
+
+                  <FormControl>
+                    <Input
+                      placeholder="Enter your email"
+                      className="h-12 bg-[#0D1117] border-[#30363D] text-white placeholder:text-zinc-500"
+                      {...field}
+                    />
+                  </FormControl>
+
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              name="password"
+              control={form.control}
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel className="text-zinc-300">
+                    Password
+                  </FormLabel>
+
+                  <FormControl>
+                    <Input
+                      type="password"
+                      placeholder="Create a password"
+                      className="h-12 bg-[#0D1117] border-[#30363D] text-white placeholder:text-zinc-500"
+                      {...field}
+                    />
+                  </FormControl>
+
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <Button
+              type="submit"
+              disabled={isSubmitting}
+              className="w-full h-12 bg-white text-black font-semibold hover:bg-zinc-200"
+            >
+              {isSubmitting ? (
+                <>
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  Creating Account...
+                </>
+              ) : (
+                'Create Account'
+              )}
+            </Button>
+          </form>
+        </Form>
+
+        {/* Footer */}
+        <div className="text-center">
+          <p className="text-zinc-400">
+            Already have an account?{' '}
+            <Link
+              href="/sign-in"
+              className="text-white hover:text-zinc-300 underline underline-offset-4"
+            >
+              Sign In
+            </Link>
+          </p>
+        </div>
       </div>
     </div>
   )
 }
 
-export default page
+export default Page
