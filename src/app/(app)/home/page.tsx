@@ -16,7 +16,7 @@ import messages from '../../../messages.json'
 const Home = () => {
   return (
     <>
-      <main className="flex-grow flex flex-col items-center justify-center bg-[#0D1117] text-white px-4 py-8 md:px-24 py-12">
+      <main className="flex-grow flex flex-col items-center justify-center bg-[#0D1117] text-white px-4 py-8 md:px-24">
         {/* Hero Section */}
         <section className="text-center mb-8 md:mb-12">
           <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight">

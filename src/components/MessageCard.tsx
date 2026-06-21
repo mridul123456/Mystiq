@@ -57,7 +57,7 @@ const MessageCard = ({
         <div className="flex items-center gap-2">
           <MessageSquare className="h-4 w-4 text-zinc-400" />
           <span className="text-sm font-medium text-zinc-300">
-            Anonymous Message
+            {message.createdBy || "Anonymous User"}
           </span>
         </div>
 

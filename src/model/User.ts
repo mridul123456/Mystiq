@@ -3,11 +3,16 @@ import mongoose, {Schema, Document} from 'mongoose'
 //Message
 export interface Message extends Document {
     content: string,
+    createdBy: String,
     createdAt: Date
 }
 
 const MessageSchema : Schema <Message> = new Schema({
     content: {
+        type: String,
+        required: true
+    },
+    createdBy: {
         type: String,
         required: true
     },
