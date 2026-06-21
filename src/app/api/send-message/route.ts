@@ -7,7 +7,7 @@ export async function POST(req: Request) {
     
     try {
 
-        const { username, content } = await req.json();
+        const { username, content, createdBy } = await req.json();
 
         const user = await UserModel.findOne({username}) 
 
@@ -30,7 +30,7 @@ export async function POST(req: Request) {
             })
         }
 
-        const newMessage = { content, createdAt: new Date() }
+        const newMessage = { content, createdBy, createdAt: new Date() }
         user.messages.push(newMessage as Message)
         await user.save();
 

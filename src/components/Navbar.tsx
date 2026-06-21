@@ -13,7 +13,7 @@ const Navbar = () => {
   return (
     <nav className="px-4 py-3 shadow-md border-b border-zinc-800 bg-black text-white">
       <div className="max-w-7xl mx-auto flex items-center justify-between">
-        <Link href="/" className="text-xl font-bold">
+        <Link href="/home" className="text-xl font-bold">
           Mystiq
         </Link>
 
@@ -25,14 +25,41 @@ const Navbar = () => {
 
             <Button
               onClick={() => signOut()}
-              className="bg-[#161B22] hover:bg-[#21262D]"
+              className="
+                bg-[#071224]
+                border border-[#263041]
+                text-white
+                rounded-lg
+                px-6
+                py-2
+                transition-all
+                duration-300
+                hover:bg-[#0B1A33]
+                hover:border-[#4B5D7A]
+                hover:shadow-[0_0_12px_rgba(59,130,246,0.25)]
+                hover:scale-[1.02]
+              "
             >
               Logout
             </Button>
           </>
         ) : (
           <Link href="/sign-in">
-            <Button className="bg-[#161B22] hover:bg-[#21262D]">
+            <Button className="
+                bg-[#071224]
+                border border-[#263041]
+                text-white
+                rounded-lg
+                px-6
+                py-2
+                transition-all
+                duration-300
+                hover:bg-[#0B1A33]
+                hover:border-[#4B5D7A]
+                hover:shadow-[0_0_12px_rgba(59,130,246,0.25)]
+                hover:scale-[1.02]
+              "
+            >
               Login
             </Button>
           </Link>

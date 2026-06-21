@@ -38,7 +38,6 @@ const MessageCard = ({
       const response = await axios.delete<ApiResponse>(
         `/api/delete-message/${message._id}`
       )
-
       toast.success('Message Deleted', {
         description: response.data.message,
       })

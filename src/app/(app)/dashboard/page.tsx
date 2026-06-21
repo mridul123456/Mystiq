@@ -77,10 +77,10 @@ const Page = () => {
 
         setMessages(response.data.messages || [])
 
-        setValue(
-          'acceptMessages',
-          response.data.isAcceptingMessage
-        )
+        // setValue(
+        //   'acceptMessages',
+        //   response.data.isAcceptingMessage
+        // )
 
         if (refresh) {
           toast.success('Refreshed Messages', {
@@ -203,7 +203,21 @@ const Page = () => {
 
           <Button
             onClick={copyToClipboard}
-            className="h-12 bg-white text-black hover:bg-zinc-200"
+            className="
+            h-12
+            bg-[#071224]
+            border border-[#263041]
+            text-white
+            rounded-lg
+            px-6
+            py-2
+            transition-all
+            duration-300
+            hover:bg-[#0B1A33]
+            hover:border-[#4B5D7A]
+            hover:shadow-[0_0_12px_rgba(59,130,246,0.25)]
+            hover:scale-[1.02]
+          "
           >
             Copy Link
           </Button>
@@ -254,8 +268,20 @@ const Page = () => {
         </h2>
 
         <Button
-          variant="outline"
-          className="border-[#30363D] bg-[#161B22] hover:bg-[#21262D] text-white"
+          className="
+            bg-[#071224]
+            border border-[#263041]
+            text-white
+            rounded-lg
+            px-6
+            py-2
+            transition-all
+            duration-300
+            hover:bg-[#0B1A33]
+            hover:border-[#4B5D7A]
+            hover:shadow-[0_0_12px_rgba(59,130,246,0.25)]
+            hover:scale-[1.02]
+          "
           onClick={(e) => {
             e.preventDefault()
             fetchMessages(true)
