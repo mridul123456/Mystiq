@@ -1,8 +1,6 @@
 import type { Metadata } from "next";
-import AuthProvider from "@/context/AuthProvider";
 import { cn } from "@/lib/utils";
-import { Toaster } from "@/components/ui/sonner";
-import './globals.css'
+    import '../globals.css'
 import Navbar from "@/components/Navbar";
 
 
@@ -21,13 +19,10 @@ export default function RootLayout({
       lang="en"
       className={cn("h-full", "antialiased", "font-sans")}
     >
-      <AuthProvider>
         <body className="min-h-full flex flex-col">
           <Navbar />
           {children}
-          <Toaster />
         </body>
-      </AuthProvider>
     </html>
   );
 }
