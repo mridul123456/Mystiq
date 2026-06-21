@@ -11,7 +11,7 @@ async function dbConnect(): Promise<void> {
     
     //If the db is already connected
     if(connection.isConnected) {
-        console.log(`Database already connected`)
+        console.log(`DB already connected`)
     }
 
     //If the db is not connected
@@ -20,7 +20,7 @@ async function dbConnect(): Promise<void> {
         connection.isConnected = db.connections[0].readyState;
         console.log(`DB connected successfully`)
     } catch(err) { 
-        console.log(`Database connetion failure`, err);
+        console.log(`DB connection failure`, err);
         //Gracefully exiting the process
         process.exit(1);
     }

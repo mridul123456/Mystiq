@@ -65,7 +65,6 @@ function page() {
       toast.success("Success", {
         description: response.data.message,
       })
-      console.log("User name bro", username)
       //or
       // toast.success(response.data.message)
       router.replace(`/verify/${username}`)
@@ -86,10 +85,10 @@ function page() {
       <div className="w-full max-w-md p-8 space-y-8 bg-white rounded-lg shadow-md" >
           <div className="text-center">
             <h1 className="text-4xl font-extrabold tracking-tight lg:text-5xl mb-6">
-              Join Mystery Message
+              Join Mystiq
             </h1>
             <p className="mb-4" >
-              Signup to start your anonymous adventure
+              Sign Up to start your anonymous adventure
             </p>
           </div>
 
@@ -160,9 +159,9 @@ function page() {
                   {
                     isSubmitting ? (
                     <>
-                      <Loader className="mr-2 h-4 w-4 animate-spin" /> Please wait
+                      <Loader className="mr-2 h-4 w-4 animate-spin" /> Please Wait
                     </>
-                    ) : ('Signup')
+                    ) : ('SIGN UP')
                   }
                 </Button>
             </form>

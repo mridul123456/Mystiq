@@ -4,40 +4,42 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import * as z from "zod"
 import Link from "next/link"
-import { useState } from "react"
 import { toast } from "sonner"
 import { useRouter } from "next/navigation"
-import axios, { AxiosError } from 'axios'
-import { ApiResponse } from "@/types/ApiResponse"
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
-import { Loader, Loader2Icon } from "lucide-react";
-import { signInSchmea } from "@/schemas/signInSchema"
+import { signInSchema } from "@/schemas/signInSchema"
 import { signIn } from "next-auth/react"
 
 function page() {
   const router = useRouter();
   
   //Zod implementation
-  const form = useForm<z.infer<typeof signInSchmea> >({
-    resolver: zodResolver(signInSchmea),
+  const form = useForm<z.infer<typeof signInSchema> >({
+    resolver: zodResolver(signInSchema),
     defaultValues: {
       identifier: '',
       password: ''
     }
   })
   
-  const onSubmit = async (data: z.infer<typeof signInSchmea>) => {
+  const onSubmit = async (data: z.infer<typeof signInSchema>) => {
     const result = await signIn('credentials', {
       redirect: false,
       identifier: data.identifier,
       password: data.password
     })
 
+    console.log('Result ', result);
+
     if(result?.error) {
       toast.error('Login Failed', {
-        description: 'Incorrect Username and Password'
+        description: 'Incorrect Username and Password',
+        style: {
+          background: 'red',
+          color: 'white',
+        },
       })
     } else {
       toast.success('Login Successful')
@@ -53,7 +55,7 @@ function page() {
       <div className="w-full max-w-md p-8 space-y-8 bg-white rounded-lg shadow-md" >
           <div className="text-center">
             <h1 className="text-4xl font-extrabold tracking-tight lg:text-5xl mb-6">
-              Join Mystery Message
+              Mystiq
             </h1>
             <p className="mb-4" >
               Sign in to start your anonymous adventure
@@ -67,7 +69,7 @@ function page() {
                   control={form.control}
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Username/Username</FormLabel>
+                      <FormLabel>Username/Email</FormLabel>
                       <FormControl>
                         <Input 
                           placeholder="Username/Email"
@@ -99,7 +101,7 @@ function page() {
                 />
 
                 <Button type="submit" className="w-full" >
-                  SignIn
+                  LOG IN
                 </Button>
             </form>
           </Form>
@@ -107,7 +109,7 @@ function page() {
             <p>
               New User?{' '}
               <Link href="/sign-up" className="text-blue-600 hover:text-blue-800">
-                  Sign up
+                  Sign Up
               </Link>
             </p>
           </div>

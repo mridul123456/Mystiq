@@ -48,7 +48,6 @@ const MessageCard = ({ message, onMessageDelete } : MessageCardProp) => {
   return (
     <Card>
         <CardHeader>
-            <CardTitle>Card Title</CardTitle>
              <AlertDialog>
                 <AlertDialogTrigger asChild>
                     <Button variant="destructive"> <X className="w-5 h-5" /> </Button> 
@@ -57,8 +56,7 @@ const MessageCard = ({ message, onMessageDelete } : MessageCardProp) => {
                     <AlertDialogHeader>
                     <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
                     <AlertDialogDescription>
-                        This action cannot be undone. This will permanently delete your
-                        account from our servers.
+                        This action cannot be undone. This will permanently delete the message.
                     </AlertDialogDescription>
                     </AlertDialogHeader>
                     <AlertDialogFooter>
@@ -67,7 +65,6 @@ const MessageCard = ({ message, onMessageDelete } : MessageCardProp) => {
                     </AlertDialogFooter>
                 </AlertDialogContent>
             </AlertDialog>
-            <CardDescription>Card Description</CardDescription>
         </CardHeader>
         <CardContent>
         </CardContent>

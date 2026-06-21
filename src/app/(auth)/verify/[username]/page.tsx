@@ -3,8 +3,7 @@ import { useParams, useRouter } from 'next/navigation';
 import React from 'react'
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
-import { signUpSchema } from '@/schemas/signUpSchema';
+import { Form, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from "zod"
 import { verifySchema } from '@/schemas/verifySchema';
@@ -27,12 +26,16 @@ const VerifyAccount = () => {
                 username: params.username,
                 code: data.code
             })
-
-            toast.success("Success", {
-                description: response.data.message,
-            })
-
-            router.replace('sign-in')
+            
+            //If the user entered correct code
+            if(response.data.success) {
+                toast.success("Success", {
+                    description: response.data.message,
+                })
+            }
+            
+            toast.error("Please enter correct verification code.")
+            
         } catch (error) {
             console.error(`Verification code is incorrect.`, error);
             const axiosError = error as AxiosError<ApiResponse>
