@@ -239,9 +239,9 @@ const Page = () => {
             </p>
           </div>
 
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-4 ml-2">
           <span
-            className={`font-medium ${
+            className={`hidden sm:inline font-medium ${
               acceptMessages
                 ? 'text-emerald-400'
                 : 'text-red-400'
