@@ -1,8 +1,10 @@
-import mongoose, {Schema, Document} from 'mongoose'
+import mongoose, {Schema, Document, Types} from 'mongoose'
 
 //Message
 export interface Message extends Document {
+    _id: Types.ObjectId,
     content: string,
+    createdBy: String,
     createdAt: Date
 }
 
@@ -11,8 +13,12 @@ const MessageSchema : Schema <Message> = new Schema({
         type: String,
         required: true
     },
+    createdBy: {
+        type: String,
+        required: true
+    },
     createdAt: {
-        type: Date,
+        type: Date, 
         required: true,
         default: Date.now
     }
