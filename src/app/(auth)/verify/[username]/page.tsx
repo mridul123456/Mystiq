@@ -106,7 +106,22 @@ const VerifyAccount = () => {
             <Button
               type="submit"
               disabled={!form.formState.isValid}
-              className="w-full h-12 bg-white text-black font-semibold hover:bg-zinc-200"
+              className="
+                w-full
+                h-12
+                bg-[#071224]
+                border border-[#263041]
+                text-white
+                rounded-lg
+                px-6
+                py-2
+                transition-all
+                duration-300
+                hover:bg-[#0B1A33]
+                hover:border-[#4B5D7A]
+                hover:shadow-[0_0_12px_rgba(59,130,246,0.25)]
+                hover:scale-[1.02]
+              "
             >
               Verify Account
             </Button>

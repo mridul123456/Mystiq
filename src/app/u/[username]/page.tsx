@@ -14,6 +14,10 @@ interface PageProps {
     username: string
   }
 }
+interface SuggestMessagesResponse {
+  success: boolean
+  messages: string[]
+}
 
 export default function PublicProfilePage({
   params,
@@ -29,8 +33,19 @@ export default function PublicProfilePage({
   const [suggestions, setSuggestions] = useState<string[]>([])
 
   const handleSendMessage = async () => {
+
+    if(!message.trim() && !name.trim()) {
+      toast.error('Name and message are required!')
+      return;
+    }
+
     if (!message.trim()) {
       toast.error('Message is required')
+      return
+    }
+
+    if (!name.trim()) {
+      toast.error('Name is required')
       return
     }
 
@@ -45,7 +60,6 @@ export default function PublicProfilePage({
           createdBy: name || 'Anonymous',
         }
       )
-
       toast.success('Success', {
         description: response.data.message,
       })
@@ -65,46 +79,73 @@ export default function PublicProfilePage({
     }
   }
 
+  //For Open AI Message Stream
+  // const handleSuggestMessages = async () => {
+  //   try {
+  //     setIsSuggesting(true)
+
+  //     const response = await fetch(
+  //       '/api/suggest-messages',
+  //       {
+  //         method: 'POST',
+  //       }
+  //     )
+      
+
+  //     const reader = response.body?.getReader()
+
+  //     if (!reader) return
+
+  //     const decoder = new TextDecoder()
+
+  //     let result = ''
+
+  //     while (true) {
+  //       const { done, value } =
+  //         await reader.read()
+
+  //       if (done) break
+
+  //       result += decoder.decode(value)
+  //     }
+
+  //     const questions = result
+  //       .split('||')
+  //       .map((q) => q.trim())
+  //       .filter(Boolean)
+
+  //     setSuggestions(questions)
+  //   } catch (error) {
+  //     toast.error('Failed to generate suggestions')
+  //   } finally {
+  //     setIsSuggesting(false)
+  //   }
+  // }
+
   const handleSuggestMessages = async () => {
-    try {
+  try {
       setIsSuggesting(true)
 
-      const response = await fetch(
-        '/api/suggest-messages',
-        {
-          method: 'POST',
-        }
-      )
+        const response = await axios.get<SuggestMessagesResponse>(
+          '/api/suggest-messages'
+        )
 
-      const reader = response.body?.getReader()
+      setSuggestions(response.data.messages)
 
-      if (!reader) return
-
-      const decoder = new TextDecoder()
-
-      let result = ''
-
-      while (true) {
-        const { done, value } =
-          await reader.read()
-
-        if (done) break
-
-        result += decoder.decode(value)
-      }
-
-      const questions = result
-        .split('||')
-        .map((q) => q.trim())
-        .filter(Boolean)
-
-      setSuggestions(questions)
     } catch (error) {
-      toast.error('Failed to generate suggestions')
+      const axiosError = error as AxiosError<ApiResponse>
+
+      toast.error('Failed', {
+        description:
+          axiosError.response?.data.message ??
+          'Failed to fetch suggestions',
+      })
     } finally {
       setIsSuggesting(false)
     }
   }
+
+
 
   return (
     <div className="min-h-screen bg-[#0D1117] px-4 py-10">

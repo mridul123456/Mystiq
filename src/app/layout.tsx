@@ -3,7 +3,6 @@ import AuthProvider from "@/context/AuthProvider";
 import { cn } from "@/lib/utils";
 import { Toaster } from "@/components/ui/sonner";
 import './globals.css'
-import Navbar from "@/components/Navbar";
 
 
 export const metadata: Metadata = {
@@ -25,6 +24,7 @@ export default function RootLayout({
           <AuthProvider>
             {/* <Navbar /> */}
             {children}
+            <Toaster  />
             <Toaster richColors theme="light" />
           </AuthProvider>
         </body>

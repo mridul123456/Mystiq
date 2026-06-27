@@ -21,13 +21,14 @@ import {
 } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
-import { Loader2 } from 'lucide-react'
+import { Loader2, Eye, EyeOff } from 'lucide-react'
 
 function Page() {
   const [username, setUsername] = useState('')
   const [usernameMessage, setUsernameMessage] = useState('')
   const [isCheckingUsername, setIsCheckingUsername] = useState(false)
   const [isSubmitting, setIsSubmitting] = useState(false)
+  const [showPassword, setShowPassword] = useState(false)
 
   const debounced = useDebounceCallback(setUsername, 300)
   const router = useRouter()
@@ -195,23 +196,55 @@ function Page() {
                   </FormLabel>
 
                   <FormControl>
-                    <Input
-                      type="password"
-                      placeholder="Create a password"
-                      className="h-12 bg-[#0D1117] border-[#30363D] text-white placeholder:text-zinc-500"
-                      {...field}
-                    />
+                    <div className="relative">
+                      <Input
+                        type={showPassword ? 'text' : 'password'}
+                        placeholder="Create a password"
+                        className="
+                          h-12
+                          bg-[#0D1117]
+                          border-[#30363D]
+                          text-white
+                          placeholder:text-zinc-500
+                          pr-12
+                        "
+                        {...field}
+                      />
+
+                      <button
+                        type="button"
+                        onClick={() => setShowPassword(!showPassword)}
+                        className="
+                          absolute
+                          right-3
+                          top-1/2
+                          -translate-y-1/2
+                          text-zinc-500
+                          hover:text-white
+                          transition-colors
+                        "
+                      >
+                        {showPassword ? (
+                          <EyeOff size={16} />
+                        ) : (
+                          <Eye size={16} />
+                        )}
+                      </button>
+                    </div>
                   </FormControl>
 
                   <FormMessage />
                 </FormItem>
               )}
             />
+            
 
             <Button
               type="submit"
               disabled={isSubmitting}
               className="
+                w-full
+                h-12
                 bg-[#071224]
                 border border-[#263041]
                 text-white

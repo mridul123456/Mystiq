@@ -18,9 +18,13 @@ import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
 import { signInSchema } from '@/schemas/signInSchema'
 import { signIn } from 'next-auth/react'
+import { Eye, EyeOff } from 'lucide-react'
+import { useState } from 'react'
 
 function Page() {
   const router = useRouter()
+
+  const [showPassword, setShowPassword] = useState(false)
 
   const form = useForm<z.infer<typeof signInSchema>>({
     resolver: zodResolver(signInSchema),
@@ -94,7 +98,7 @@ function Page() {
               )}
             />
 
-            <FormField
+            {/* <FormField
               name="password"
               control={form.control}
               render={({ field }) => (
@@ -115,12 +119,66 @@ function Page() {
                   <FormMessage />
                 </FormItem>
               )}
+            /> */}
+
+            <FormField
+              name="password"
+              control={form.control}
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel className="text-zinc-300">
+                    Password
+                  </FormLabel>
+
+                  <FormControl>
+                    <div className="relative">
+                      <Input
+                        type={showPassword ? 'text' : 'password'}
+                        placeholder="Enter your password"
+                        className="
+                          h-12
+                          bg-[#0D1117]
+                          border-[#30363D]
+                          text-white
+                          placeholder:text-zinc-500
+                          pr-12
+                        "
+                        {...field}
+                      />
+
+                      <button
+                        type="button"
+                        onClick={() => setShowPassword(!showPassword)}
+                        className="
+                          absolute
+                          right-3
+                          top-1/2
+                          -translate-y-1/2
+                          text-zinc-500
+                          hover:text-white
+                          transition-colors
+                        "
+                      >
+                        {showPassword ? (
+                          <EyeOff size={18} />
+                        ) : (
+                          <Eye size={18} />
+                        )}
+                      </button>
+                    </div>
+                  </FormControl>
+
+                  <FormMessage />
+                </FormItem>
+              )}
             />
 
             <Button
               type="submit"
               disabled={!form.formState.isValid}
               className="
+                w-full
+                h-12
                 bg-[#071224]
                 border border-[#263041]
                 text-white
